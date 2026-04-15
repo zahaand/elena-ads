@@ -2,6 +2,8 @@
 
 Лендинг специалиста по интернет-рекламе (Яндекс Директ, Авито).
 
+**Ссылка:** [elena-ads](https://elena-ads.vercel.app)
+
 <img width="1552" height="922" alt="Снимок экрана — 2026-04-16 в 02 27 13" src="https://github.com/user-attachments/assets/8622006e-5348-469a-bb5d-a62925973718" />
 
 ## Стек
