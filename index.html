@@ -231,36 +231,61 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 4rem;
+      padding: 4rem 3rem;
       position: relative;
-      overflow: hidden;
     }
 
     .hero-visual {
       width: 100%;
-      max-width: 400px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.85rem;
-      position: relative;
+      max-width: 420px;
+      display: flex;
+      gap: 1.25rem;
+      align-items: flex-start;
+    }
+
+    .hero-col {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      flex: 1;
+    }
+
+    .hero-col-right {
+      margin-top: 3rem;
     }
 
     .platform-card {
       background: white;
       border: 1px solid var(--border);
       border-radius: 2px;
-      padding: 1.2rem;
+      padding: 1.5rem;
       position: relative;
       animation: float 6s ease-in-out infinite;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.22), 0 2px 6px rgba(0,0,0,0.14);
     }
 
-    .platform-card:nth-child(2) { animation-delay: -1.5s; }
+    .platform-card:nth-child(2) { animation-delay: -3s; }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.22), 0 2px 6px rgba(0,0,0,0.14);
+      }
+      50% {
+        transform: translateY(-6px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.32), 0 6px 14px rgba(0,0,0,0.18);
+      }
+    }
+
+    /* левая колонка — на исходном уровне, правая — сдвинута вниз */
+    .platform-card:nth-child(1) { animation-delay: 0s; }
+    .platform-card:nth-child(2) { margin-top: 3rem; animation-delay: -1.5s; }
     .platform-card:nth-child(3) { animation-delay: -3s; }
-    .platform-card:nth-child(4) { animation-delay: -4.5s; }
+    .platform-card:nth-child(4) { margin-top: 3rem; animation-delay: -4.5s; }
 
     @keyframes float {
       0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-5px); }
+      50% { transform: translateY(-6px); }
     }
 
     .platform-badge {
@@ -880,29 +905,33 @@
 
   <div class="hero-right">
     <div class="hero-visual">
-      <div class="platform-card card-red">
-        <span class="platform-badge badge-yandex">Яндекс Директ</span>
-        <h3>Поиск</h3>
-        <p>Горячий трафик по целевым запросам — показываемся только тем, кто ищет прямо сейчас</p>
-        <span class="metric-pill pill-red">↓ CPL на 38%</span>
+      <div class="hero-col hero-col-left">
+        <div class="platform-card card-red">
+          <span class="platform-badge badge-yandex">Яндекс Директ</span>
+          <h3>Поиск</h3>
+          <p>Горячий трафик по целевым запросам — показываемся только тем, кто ищет прямо сейчас</p>
+          <span class="metric-pill pill-red">↓ CPL на 38%</span>
+        </div>
+        <div class="platform-card card-purple">
+          <span class="platform-badge badge-rsy">Яндекс РСЯ</span>
+          <h3>Ретаргетинг</h3>
+          <p>Возвращаем тёплую аудиторию и охватываем новых по интересам</p>
+          <span class="metric-pill pill-purple">↑ ROAS +180%</span>
+        </div>
       </div>
-      <div class="platform-card card-blue">
-        <span class="platform-badge badge-avito">Авито Реклама</span>
-        <h3>Продвижение объявлений</h3>
-        <p>Максимальная видимость и рост целевых обращений без слива бюджета</p>
-        <span class="metric-pill pill-blue">↑ Заявки в 2.4×</span>
-      </div>
-      <div class="platform-card card-purple">
-        <span class="platform-badge badge-rsy">Яндекс РСЯ</span>
-        <h3>Ретаргетинг</h3>
-        <p>Возвращаем тёплую аудиторию и охватываем новых по интересам</p>
-        <span class="metric-pill pill-purple">↑ ROAS +180%</span>
-      </div>
-      <div class="platform-card card-green">
-        <span class="platform-badge badge-audit">Аудит</span>
-        <h3>Разбор кампаний</h3>
-        <p>Нахожу где бюджет утекает впустую — и даю конкретный план исправлений</p>
-        <span class="metric-pill pill-green">↓ Слив бюджета −60%</span>
+      <div class="hero-col hero-col-right">
+        <div class="platform-card card-blue">
+          <span class="platform-badge badge-avito">Авито Реклама</span>
+          <h3>Продвижение объявлений</h3>
+          <p>Максимальная видимость и рост целевых обращений без слива бюджета</p>
+          <span class="metric-pill pill-blue">↑ Заявки в 2.4×</span>
+        </div>
+        <div class="platform-card card-green">
+          <span class="platform-badge badge-audit">Аудит</span>
+          <h3>Разбор кампаний</h3>
+          <p>Нахожу где бюджет утекает впустую — и даю конкретный план исправлений</p>
+          <span class="metric-pill pill-green">↓ Слив бюджета −60%</span>
+        </div>
       </div>
     </div>
   </div>
