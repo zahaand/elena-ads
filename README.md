@@ -4,7 +4,7 @@
 
 **Ссылка:** [elena-ads](https://elena-ads.vercel.app)
 
-<img width="1552" height="922" alt="Снимок экрана — 2026-04-16 в 02 49 11" src="https://github.com/user-attachments/assets/6120a02f-4a0c-47a3-8842-d4996c82bfd3" />
+<img width="1552" height="922" alt="Снимок экрана — 2026-04-16 в 03 57 09" src="https://github.com/user-attachments/assets/ad9849ad-5485-4d23-b8a3-6ec6c49afc04" />
 
 ## Стек
 
