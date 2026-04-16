@@ -970,6 +970,99 @@
       }
     }
 
+
+    /* ── CONTACTS MODAL ──────────────────────────────── */
+    .modal-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(26,26,26,0.55);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 500;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--cream);
+      border: 1px solid var(--border);
+      padding: 2.5rem;
+      max-width: 440px;
+      width: calc(100% - 3rem);
+      position: relative;
+      animation: modal-in 0.2s ease;
+    }
+
+    @keyframes modal-in {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-title {
+      font-family: var(--serif);
+      font-size: 1.4rem;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 0.4rem;
+    }
+
+    .modal-sub {
+      font-size: 0.85rem;
+      color: var(--ink-3);
+      font-weight: 300;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-contacts {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-link {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      padding: 0.9rem 1.1rem;
+      background: white;
+      border: 1px solid var(--border);
+      text-decoration: none;
+      color: var(--ink);
+      font-size: 0.9rem;
+      font-weight: 400;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .modal-link:hover { border-color: var(--accent); background: var(--accent-light); }
+
+    .modal-link-icon {
+      width: 32px; height: 32px;
+      background: var(--cream-2);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .modal-link-icon svg { width: 14px; height: 14px; }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem; right: 1rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--ink-3);
+      font-size: 1.4rem;
+      line-height: 1;
+      padding: 0.25rem 0.5rem;
+      transition: color 0.2s;
+    }
+
+    .modal-close:hover { color: var(--ink); }
+
     /* ── FOOTER ──────────────────────────────────────── */
     footer {
       background: var(--ink);
@@ -1053,8 +1146,7 @@
       прозрачная аналитика, честные отчёты.
     </p>
     <div class="hero-cta-group">
-      <a href="#contact" class="btn-primary">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.99 2.18 2 2 0 012.98 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L7.09 7.91A16 16 0 0016 16.91l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+      <a href="#" class="btn-primary" onclick="openContacts(event)">
         Обсудить проект
       </a>
       <a href="#cases" class="btn-secondary">Смотреть кейсы →</a>
@@ -1357,8 +1449,7 @@
         <li>Инструкция по самостоятельному ведению</li>
       </ul>
       <p class="price-note">Яндекс Директ (поиск + РСЯ) или Авито — на выбор. Две платформы — отдельная цена.</p>
-      <a href="tel:+79817399144" class="price-cta">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.99 2.18 2 2 0 012.98 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L7.09 7.91A16 16 0 0016 16.91l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+      <a href="#" class="price-cta" onclick="openContacts(event)">
         Обсудить проект
       </a>
     </div>
@@ -1384,8 +1475,7 @@
         <li>Ответы на вопросы в рабочее время</li>
       </ul>
       <p class="price-note">При бюджете свыше 100 000 ₽/мес — стоимость ведения обсуждается индивидуально.</p>
-      <a href="tel:+79817399144" class="price-cta">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.99 2.18 2 2 0 012.98 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L7.09 7.91A16 16 0 0016 16.91l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+      <a href="#" class="price-cta" onclick="openContacts(event)">
         Обсудить проект
       </a>
     </div>
@@ -1652,6 +1742,83 @@
     const nav = document.querySelector('nav');
     if (!nav.contains(e.target)) closeMenu();
   });
+
+  function openContacts(e) {
+    e.preventDefault();
+    document.getElementById('contactsModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeContactsBtn() {
+    document.getElementById('contactsModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function closeContacts(e) {
+    if (e.target === document.getElementById('contactsModal')) {
+      closeContactsBtn();
+    }
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeContactsBtn();
+  });
 </script>
+
+<!-- CONTACTS MODAL -->
+<div class="modal-overlay" id="contactsModal" onclick="closeContacts(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeContactsBtn()">×</button>
+    <div class="modal-title">Обсудим проект</div>
+    <p class="modal-sub">Выберите удобный способ связи — отвечу в течение дня</p>
+    <div class="modal-contacts">
+      <a href="https://t.me/bolee18" class="modal-link" target="_blank" rel="noopener">
+        <div class="modal-link-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21.98 4.33L18.57 19.5c-.25 1.11-.9 1.39-1.83.87l-5.07-3.73-2.44 2.35c-.27.27-.5.5-1.02.5l.36-5.14L17.05 8.1c.44-.39-.1-.61-.68-.22L6.36 14.67 1.35 13.1c-1.09-.34-1.11-1.09.23-1.61L20.45 2.79c.91-.33 1.7.22 1.53 1.54z"/>
+          </svg>
+        </div>
+        <div>
+          <div style="font-weight:500;">Telegram</div>
+          <div style="font-size:0.78rem;color:var(--ink-3);">@bolee18 — быстрый ответ</div>
+        </div>
+      </a>
+      <a href="https://max.ru/u/f9LHodD0cOKCgpCOnBjbrulMPveGxFRO2WqpWCaM6VCDF4PTb6yruNusgjs" class="modal-link" target="_blank" rel="noopener">
+        <div class="modal-link-icon" style="background:#e8f0ff;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#2952a3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+          </svg>
+        </div>
+        <div>
+          <div style="font-weight:500;">MAX</div>
+          <div style="font-size:0.78rem;color:var(--ink-3);">Даже на парковке →</div>
+        </div>
+      </a>
+      <a href="tel:+79817399144" class="modal-link">
+        <div class="modal-link-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.99 2.18 2 2 0 012.98 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L7.09 7.91A16 16 0 0016 16.91l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/>
+          </svg>
+        </div>
+        <div>
+          <div style="font-weight:500;">Телефон</div>
+          <div style="font-size:0.78rem;color:var(--ink-3);">+7 981 739-91-44</div>
+        </div>
+      </a>
+      <a href="mailto:morozovaee1808@yandex.ru" class="modal-link">
+        <div class="modal-link-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+          </svg>
+        </div>
+        <div>
+          <div style="font-weight:500;">Email</div>
+          <div style="font-size:0.78rem;color:var(--ink-3);">morozovaee1808@yandex.ru</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
