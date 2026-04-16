@@ -23,7 +23,6 @@
 
 <img width="1552" height="922" alt="Снимок экрана — 2026-04-16 в 03 54 19" src="https://github.com/user-attachments/assets/cd7ac86d-08b4-470d-9a59-64c08e6c1d95" />
 
-
 ## Адаптивность
 
 Сайт оптимизирован для всех устройств:
