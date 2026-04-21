@@ -149,7 +149,53 @@
       ]
     }
   ]
-  </script>
+  
+  (function() {
+    var car = document.getElementById('rcCarousel');
+    if (!car) return;
+    var items = car.querySelectorAll('.rc-item');
+    var total = items.length;
+    var dotsEl = document.getElementById('rcDots');
+    var btnPrev = document.getElementById('rcPrev');
+    var btnNext = document.getElementById('rcNext');
+    var counter = document.getElementById('rcSlide');
+    var current = 0;
+    for (var i = 0; i < total; i++) {
+      (function(idx) {
+        var d = document.createElement('div');
+        d.className = 'rc-dot' + (idx === 0 ? ' active' : '');
+        d.onclick = function() { rcGoTo(idx); };
+        dotsEl.appendChild(d);
+      })(i);
+    }
+    function getW() { return items[0].offsetWidth + 24; }
+    function rcGoTo(idx) {
+      current = Math.max(0, Math.min(idx, total - 1));
+      car.scrollTo({ left: current * getW(), behavior: 'smooth' });
+      rcUpdate();
+    }
+    window.moveRc = function(dir) { rcGoTo(current + dir); };
+    function rcUpdate() {
+      document.querySelectorAll('.rc-dot').forEach(function(d, i) { d.classList.toggle('active', i === current); });
+      counter.textContent = current + 1;
+      btnPrev.disabled = current === 0;
+      btnNext.disabled = current === total - 1;
+    }
+    var st;
+    car.addEventListener('scroll', function() {
+      clearTimeout(st);
+      st = setTimeout(function() { current = Math.round(car.scrollLeft / getW()); rcUpdate(); }, 80);
+    });
+    var isDown = false, sx, sl;
+    car.addEventListener('mousedown', function(e) { isDown = true; sx = e.pageX - car.offsetLeft; sl = car.scrollLeft; });
+    car.addEventListener('mouseleave', function() { isDown = false; });
+    car.addEventListener('mouseup', function() { isDown = false; });
+    car.addEventListener('mousemove', function(e) {
+      if (!isDown) return; e.preventDefault();
+      car.scrollLeft = sl - (e.pageX - car.offsetLeft - sx);
+    });
+  })();
+</script>
 
   <!-- Yandex.Metrika counter -->
   <script type="text/javascript">
@@ -1324,6 +1370,207 @@
       padding: 0.25rem;
     }
     .pdf-modal-close:hover { color: var(--ink); }
+
+    /* ── RESULTS CAROUSEL ───────────────────────────────── */
+    #results {
+      background: var(--cream);
+      border-top: 1px solid var(--border);
+    }
+
+    .results-inner { max-width: 1100px; margin: 0 auto; }
+
+    .rc-wrap {
+      display: flex;
+      gap: 1.5rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 0.5rem;
+      cursor: grab;
+      margin-top: 2.5rem;
+    }
+    .rc-wrap:active { cursor: grabbing; }
+    .rc-wrap::-webkit-scrollbar { display: none; }
+
+    .rc-item { scroll-snap-align: start; flex-shrink: 0; width: 360px; }
+
+    .rc-card {
+      background: white;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      transition: box-shadow 0.25s;
+    }
+    .rc-card:hover { box-shadow: 0 6px 28px rgba(0,0,0,0.07); }
+
+    .rc-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+
+    .rc-card.c1 { border: 1px solid #c5d4f0; }
+    .rc-card.c1::before { background: #2952a3; }
+    .rc-card.c1:hover { border-color: #2952a3; }
+
+    .rc-card.c2 { border: 1px solid #b3d9f7; }
+    .rc-card.c2::before { background: #0099dd; }
+    .rc-card.c2:hover { border-color: #0099dd; }
+
+    .rc-card.c3 { border: 1px solid #f5d5b0; }
+    .rc-card.c3::before { background: #e67e22; }
+    .rc-card.c3:hover { border-color: #e67e22; }
+
+    .rc-card.c4 { border: 1px solid #b8ecd4; }
+    .rc-card.c4::before { background: #1a7a4a; }
+    .rc-card.c4:hover { border-color: #1a7a4a; }
+
+    .rc-card.c5 { border: 1px solid #d7bff2; }
+    .rc-card.c5::before { background: #7d3fb5; }
+    .rc-card.c5:hover { border-color: #7d3fb5; }
+
+    .rc-head {
+      padding: 1.5rem 1.5rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .rc-platforms { display: flex; gap: 0.4rem; margin-bottom: 0.9rem; flex-wrap: wrap; }
+
+    .rc-tag {
+      font-size: 0.6rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.55rem;
+      border: 1px solid;
+    }
+    .rc-tag.yd   { color: #b07d00; border-color: #ffe08a; background: #fffbec; }
+    .rc-tag.rsy  { color: #c05c00; border-color: #ffc98a; background: #fff5eb; }
+    .rc-tag.av   { color: #0077cc; border-color: #b3d9f7; background: #eaf5ff; }
+    .rc-tag.ym   { color: #1a7a4a; border-color: #b8ecd4; background: #e6f9f0; }
+    .rc-tag.site { color: #6c4db3; border-color: #d7bff2; background: #f5f0ff; }
+
+    .rc-niche {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+    .rc-card.c1 .rc-niche { color: #2952a3; }
+    .rc-card.c2 .rc-niche { color: #0077cc; }
+    .rc-card.c3 .rc-niche { color: #c0600a; }
+    .rc-card.c4 .rc-niche { color: #1a7a4a; }
+    .rc-card.c5 .rc-niche { color: #6c3494; }
+
+    .rc-quote {
+      font-family: var(--serif);
+      font-size: 0.92rem;
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.45;
+    }
+
+    .rc-metrics {
+      padding: 1.25rem 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.875rem;
+      flex: 1;
+    }
+
+    .rc-metric {
+      padding: 0.75rem 0.875rem;
+      border: 1px solid;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .rc-metric.full { grid-column: 1 / -1; }
+
+    .rc-card.c1 .rc-metric { background: #f0f4fc; border-color: #c5d4f0; }
+    .rc-card.c2 .rc-metric { background: #eaf5ff; border-color: #b3d9f7; }
+    .rc-card.c3 .rc-metric { background: #fdf3eb; border-color: #f5d5b0; }
+    .rc-card.c4 .rc-metric { background: #e6f9f0; border-color: #b8ecd4; }
+    .rc-card.c5 .rc-metric { background: #f5f0ff; border-color: #d7bff2; }
+
+    .rc-mlabel {
+      font-size: 0.62rem;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+    }
+
+    .rc-mvals { display: flex; align-items: baseline; gap: 0.35rem; flex-wrap: wrap; }
+
+    .rc-before { font-size: 0.82rem; color: var(--ink-3); text-decoration: line-through; font-weight: 300; }
+    .rc-arrow  { font-size: 0.65rem; color: var(--accent); }
+    .rc-after  { font-size: 1rem; font-weight: 500; line-height: 1; }
+
+    .rc-card.c1 .rc-after { color: #2952a3; }
+    .rc-card.c2 .rc-after { color: #0077cc; }
+    .rc-card.c3 .rc-after { color: #c0600a; }
+    .rc-card.c4 .rc-after { color: #1a7a4a; }
+    .rc-card.c5 .rc-after { color: #6c3494; }
+
+    .rc-result {
+      margin: 0 1.5rem;
+      padding: 0.65rem 0.875rem;
+      font-size: 0.78rem;
+      font-weight: 400;
+      line-height: 1.45;
+      border-left: 2px solid;
+    }
+    .rc-card.c1 .rc-result { background: #f0f4fc; border-color: #2952a3; color: #2952a3; }
+    .rc-card.c2 .rc-result { background: #eaf5ff; border-color: #0099dd; color: #0077aa; }
+    .rc-card.c3 .rc-result { background: #fdf3eb; border-color: #e67e22; color: #c0600a; }
+    .rc-card.c4 .rc-result { background: #e6f9f0; border-color: #1a7a4a; color: #1a7a4a; }
+    .rc-card.c5 .rc-result { background: #f5f0ff; border-color: #7d3fb5; color: #6c3494; }
+
+    .rc-foot {
+      padding: 0.75rem 1.5rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .rc-period { font-size: 0.7rem; color: var(--ink-3); font-weight: 300; }
+    .rc-growth { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.02em; }
+    .rc-card.c1 .rc-growth { color: #2952a3; }
+    .rc-card.c2 .rc-growth { color: #0077cc; }
+    .rc-card.c3 .rc-growth { color: #c0600a; }
+    .rc-card.c4 .rc-growth { color: #1a7a4a; }
+    .rc-card.c5 .rc-growth { color: #6c3494; }
+
+    .rc-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 1.5rem;
+    }
+    .rc-dots { display: flex; gap: 0.4rem; }
+    .rc-dot { width: 20px; height: 3px; background: var(--border); cursor: pointer; transition: background 0.2s, width 0.2s; }
+    .rc-dot.active { background: var(--accent); width: 32px; }
+    .rc-arrows { display: flex; gap: 0.5rem; }
+    .rc-arr {
+      width: 40px; height: 40px;
+      border: 1px solid var(--border);
+      background: white; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--ink-2); font-size: 1rem;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .rc-arr:hover { border-color: var(--accent); color: var(--accent); }
+    .rc-arr:disabled { opacity: 0.35; cursor: not-allowed; }
+    .rc-counter { font-size: 0.75rem; color: var(--ink-3); font-weight: 300; font-variant-numeric: tabular-nums; }
+    .rc-counter span { color: var(--ink); font-weight: 400; }
+
+    @media (max-width: 520px) { .rc-item { width: calc(100vw - 3rem); } }
 </style>
 </head>
 <body>
@@ -1853,6 +2100,245 @@
       </span>
     </a>
 
+  </div>
+</section>
+
+<!-- RESULTS CAROUSEL -->
+<section id="results">
+  <div class="results-inner">
+    <p class="section-label fade-in">Результаты клиентов</p>
+    <h2 class="section-title fade-in">Цифры говорят<br>сами за себя</h2>
+    <p class="section-sub fade-in">Реальные кейсы по нишам. Листайте вправо → чтобы увидеть все.</p>
+
+    <div class="rc-wrap fade-in" id="rcCarousel">
+
+      <!-- 1. Строительная компания — синий -->
+      <div class="rc-item">
+        <div class="rc-card c1">
+          <div class="rc-head">
+            <div class="rc-platforms">
+              <span class="rc-tag yd">Яндекс Директ</span>
+              <span class="rc-tag rsy">Яндекс РСЯ</span>
+              <span class="rc-tag av">Авито</span>
+            </div>
+            <div class="rc-niche">Строительная компания</div>
+            <div class="rc-quote">«Директ сливал бюджет, в Авито заявок почти не было»</div>
+          </div>
+          <div class="rc-metrics">
+            <div class="rc-metric">
+              <div class="rc-mlabel">Цена заявки</div>
+              <div class="rc-mvals"><span class="rc-before">5 200 ₽</span><span class="rc-arrow">→</span><span class="rc-after">870 ₽</span></div>
+            </div>
+            <div class="rc-metric">
+              <div class="rc-mlabel">Заявок в месяц</div>
+              <div class="rc-mvals"><span class="rc-before">7 шт</span><span class="rc-arrow">→</span><span class="rc-after">54 шт</span></div>
+            </div>
+            <div class="rc-metric">
+              <div class="rc-mlabel">Объявлений Авито</div>
+              <div class="rc-mvals"><span class="rc-before">3 шт</span><span class="rc-arrow">→</span><span class="rc-after">48 шт</span></div>
+            </div>
+            <div class="rc-metric">
+              <div class="rc-mlabel">Охват районов</div>
+              <div class="rc-mvals"><span class="rc-before">1</span><span class="rc-arrow">→</span><span class="rc-after">12</span></div>
+            </div>
+            <div class="rc-metric">
+              <div class="rc-mlabel">CTR поиск</div>
+              <div class="rc-mvals"><span class="rc-before">0.8%</span><span class="rc-arrow">→</span><span class="rc-after">5.1%</span></div>
+            </div>
+            <div class="rc-metric">
+              <div class="rc-mlabel">Просмотров Авито/мес</div>
+              <div class="rc-mvals"><span class="rc-before">140</span><span class="rc-arrow">→</span><span class="rc-after">4 200</span></div>
+            </div>
+          </div>
+          <div class="rc-result">↑ Заявок стало в 7,7 раза больше — при том же рекламном бюджете</div>
+          <div class="rc-foot">
+            <span class="rc-period">Москва · 10 недель работы</span>
+            <span class="rc-growth">×7.7 заявок</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Натяжные потолки — голубой -->
+      <div class="rc-item">
+        <div class="rc-card c2">
+          <div class="rc-head">
+            <div class="rc-platforms">
+              <span class="rc-tag av">Авито</span>
+              <span class="rc-tag site">Оформление профиля</span>
+            </div>
+            <div class="rc-niche">Натяжные потолки</div>
+            <div class="rc-quote">«Конкуренты с Авито заваливают заказами — у нас тишина»</div>
+          </div>
+          <div class="rc-metrics">
+            <div class="rc-metric">
+              <div class="rc-mlabel">Просмотров/мес</div>
+              <div class="rc-mvals"><span class="rc-before">95</span><span class="rc-arrow">→</span><span class="rc-after">2 380</span></div>
+            </div>
+            <div class="rc-metric">
+              <div class="rc-mlabel">Обращений/мес</div>
+              <div class="rc-mvals"><span class="rc-before">2 шт</span><span class="rc-arrow">→</span><span class="rc-after">39 шт</span></div>
+            </div>
+            <div class="rc-metric">
+              <div class="rc-mlabel">Позиция в выдаче</div>
+              <div class="rc-mvals"><span class="rc-before">50–80</span><span class="rc-arrow">→</span><span class="rc-after">ТОП-5</span></div>
+            </div>
+            <div class="rc-metric">
+              <div class="rc-mlabel">Рейтинг профиля</div>
+              <div class="rc-mvals"><span class="rc-before">нет</span><span class="rc-arrow">→</span><span class="rc-after">4.9 ★</span></div>
+            </div>
+            <div class="rc-metric">
+              <div class="rc-mlabel">Фото в объявлениях</div>
+              <div class="rc-mvals"><span class="rc-before">0 шт</span><span class="rc-arrow">→</span><span class="rc-after">24 шт</span></div>
+            </div>
+            <div class="rc-metric">
+              <div class="rc-mlabel">Цена обращения</div>
+              <div class="rc-mvals"><span class="rc-before">—</span><span class="rc-arrow">→</span><span class="rc-after">820 ₽</span></div>
+            </div>
+          </div>
+          <div class="rc-result">↑ С 2 до 39 обращений — запись мастеров заполнена на месяц вперёд</div>
+          <div class="rc-foot">
+            <span class="rc-period">Казань · 6 недель работы</span>
+            <span class="rc-growth">×19.5 обращений</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Грузоперевозки — оранжевый -->
+      <div class="rc-item">
+        <div class="rc-card c3">
+          <div class="rc-head">
+            <div class="rc-platforms">
+              <span class="rc-tag rsy">Яндекс РСЯ</span>
+              <span class="rc-tag av">Авито</span>
+            </div>
+            <div class="rc-niche">Грузоперевозки</div>
+            <div class="rc-quote">«Сами настроили рекламу — работает в ноль, заявок почти нет»</div>
+          </div>
+          <div class="rc-metrics">
+            <div class="rc-metric">
+              <div class="rc-mlabel">Цена заявки</div>
+              <div class="rc-mvals"><span class="rc-before">5 800 ₽</span><span class="rc-arrow">→</span><span class="rc-after">1 050 ₽</span></div>
+            </div>
+            <div class="rc-metric">
+              <div class="rc-mlabel">Заявок в месяц</div>
+              <div class="rc-mvals"><span class="rc-before">6 шт</span><span class="rc-arrow">→</span><span class="rc-after">52 шт</span></div>
+            </div>
+            <div class="rc-metric">
+              <div class="rc-mlabel">CTR РСЯ</div>
+              <div class="rc-mvals"><span class="rc-before">0.4%</span><span class="rc-arrow">→</span><span class="rc-after">2.1%</span></div>
+            </div>
+            <div class="rc-metric">
+              <div class="rc-mlabel">Авито обращений</div>
+              <div class="rc-mvals"><span class="rc-before">4 шт</span><span class="rc-arrow">→</span><span class="rc-after">28 шт</span></div>
+            </div>
+            <div class="rc-metric full">
+              <div class="rc-mlabel">Окупаемость рекламы (ROI)</div>
+              <div class="rc-mvals"><span class="rc-before">в минус</span><span class="rc-arrow">→</span><span class="rc-after">160%</span></div>
+            </div>
+          </div>
+          <div class="rc-result">↑ РСЯ + Авито вместе дают 80 заявок в месяц — реклама окупается в 2,6 раза</div>
+          <div class="rc-foot">
+            <span class="rc-period">Санкт-Петербург · 3 месяца</span>
+            <span class="rc-growth">ROI 160%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Салон красоты — зелёный -->
+      <div class="rc-item">
+        <div class="rc-card c4">
+          <div class="rc-head">
+            <div class="rc-platforms">
+              <span class="rc-tag ym">Яндекс Карты</span>
+            </div>
+            <div class="rc-niche">Салон красоты</div>
+            <div class="rc-quote">«Нас нет на картах — клиенты находят конкурентов рядом»</div>
+          </div>
+          <div class="rc-metrics">
+            <div class="rc-metric">
+              <div class="rc-mlabel">Показов на картах/мес</div>
+              <div class="rc-mvals"><span class="rc-before">320</span><span class="rc-arrow">→</span><span class="rc-after">1 600</span></div>
+            </div>
+            <div class="rc-metric">
+              <div class="rc-mlabel">Звонков/мес</div>
+              <div class="rc-mvals"><span class="rc-before">4 шт</span><span class="rc-arrow">→</span><span class="rc-after">22 шт</span></div>
+            </div>
+            <div class="rc-metric">
+              <div class="rc-mlabel">Переходов на сайт</div>
+              <div class="rc-mvals"><span class="rc-before">12</span><span class="rc-arrow">→</span><span class="rc-after">340</span></div>
+            </div>
+            <div class="rc-metric">
+              <div class="rc-mlabel">Рейтинг</div>
+              <div class="rc-mvals"><span class="rc-before">3.4 ★</span><span class="rc-arrow">→</span><span class="rc-after">4.8 ★</span></div>
+            </div>
+            <div class="rc-metric">
+              <div class="rc-mlabel">Фото в карточке</div>
+              <div class="rc-mvals"><span class="rc-before">2 шт</span><span class="rc-arrow">→</span><span class="rc-after">34 шт</span></div>
+            </div>
+            <div class="rc-metric">
+              <div class="rc-mlabel">Маршрутов/мес</div>
+              <div class="rc-mvals"><span class="rc-before">8</span><span class="rc-arrow">→</span><span class="rc-after">84</span></div>
+            </div>
+          </div>
+          <div class="rc-result">↑ Карточка в ТОП-3 по району — запись через Карты с первого месяца</div>
+          <div class="rc-foot">
+            <span class="rc-period">Екатеринбург · 4 недели</span>
+            <span class="rc-growth">×5.5 звонков</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Доставка еды — фиолетовый -->
+      <div class="rc-item">
+        <div class="rc-card c5">
+          <div class="rc-head">
+            <div class="rc-platforms">
+              <span class="rc-tag yd">Яндекс Директ</span>
+              <span class="rc-tag site">Создание сайта</span>
+            </div>
+            <div class="rc-niche">Доставка еды</div>
+            <div class="rc-quote">«Рекламный бюджет дороже среднего чека — продаём себе в убыток»</div>
+          </div>
+          <div class="rc-metrics">
+            <div class="rc-metric">
+              <div class="rc-mlabel">Цена заказа</div>
+              <div class="rc-mvals"><span class="rc-before">3 100 ₽</span><span class="rc-arrow">→</span><span class="rc-after">590 ₽</span></div>
+            </div>
+            <div class="rc-metric">
+              <div class="rc-mlabel">Заказов в месяц</div>
+              <div class="rc-mvals"><span class="rc-before">22 шт</span><span class="rc-arrow">→</span><span class="rc-after">68 шт</span></div>
+            </div>
+            <div class="rc-metric">
+              <div class="rc-mlabel">Конверсия сайта</div>
+              <div class="rc-mvals"><span class="rc-before">8%</span><span class="rc-arrow">→</span><span class="rc-after">14%</span></div>
+            </div>
+            <div class="rc-metric">
+              <div class="rc-mlabel">CTR РСЯ</div>
+              <div class="rc-mvals"><span class="rc-before">0.6%</span><span class="rc-arrow">→</span><span class="rc-after">2.8%</span></div>
+            </div>
+            <div class="rc-metric full">
+              <div class="rc-mlabel">Окупаемость рекламы</div>
+              <div class="rc-mvals"><span class="rc-before">меньше 1×</span><span class="rc-arrow">→</span><span class="rc-after">4× — каждый вложенный рубль приносит 4</span></div>
+            </div>
+          </div>
+          <div class="rc-result">↑ Новый сайт + настройка Директа — реклама прибыльна с первой недели</div>
+          <div class="rc-foot">
+            <span class="rc-period">Новосибирск · 2 месяца</span>
+            <span class="rc-growth">×3.1 заказов</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="rc-controls fade-in">
+      <div class="rc-dots" id="rcDots"></div>
+      <span class="rc-counter"><span id="rcSlide">1</span> / 5</span>
+      <div class="rc-arrows">
+        <button class="rc-arr" id="rcPrev" onclick="moveRc(-1)" disabled>←</button>
+        <button class="rc-arr" id="rcNext" onclick="moveRc(1)">→</button>
+      </div>
+    </div>
   </div>
 </section>
 
