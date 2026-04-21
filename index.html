@@ -820,6 +820,8 @@
       padding: 2.5rem;
       position: relative;
       transition: border-color 0.25s, box-shadow 0.25s;
+      display: flex;
+      flex-direction: column;
     }
 
     .price-card:hover {
@@ -920,13 +922,14 @@
       border-top: 1px solid var(--border);
       padding-top: 1rem;
       line-height: 1.5;
+      margin-top: auto;
     }
 
     .price-cta {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      margin-top: 1rem;
+      margin-top: 1.25rem;
       background: var(--ink);
       color: var(--cream);
       padding: 0.75rem 1.5rem;
@@ -1036,6 +1039,7 @@
     }
 
     .bonus-item:hover .bonus-dl { border-color: var(--accent); }
+
 
     @media (max-width: 900px) {
       .bonus-grid { grid-template-columns: 1fr 1fr; }
@@ -1239,7 +1243,88 @@
       .process-list { grid-template-columns: 1fr; }
       .hero-stats { flex-wrap: wrap; gap: 1.5rem; }
     }
-  </style>
+  
+    /* ── PDF MODAL ───────────────────────────────────────── */
+    .pdf-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(20,18,14,0.65);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      padding: 1rem;
+    }
+    .pdf-modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .pdf-modal {
+      background: white;
+      padding: 2rem;
+      max-width: 360px;
+      width: 100%;
+      position: relative;
+    }
+    .pdf-modal-title {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+    }
+    .pdf-modal-sub {
+      font-size: 0.82rem;
+      color: var(--ink-3);
+      font-weight: 300;
+      margin-bottom: 1.5rem;
+    }
+    .pdf-modal-actions {
+      display: flex;
+      gap: 0.75rem;
+    }
+    .pdf-modal-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      flex: 1;
+      padding: 0.75rem 1rem;
+      font-size: 0.8rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      color: var(--ink);
+      background: white;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+      cursor: pointer;
+    }
+    .pdf-modal-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .pdf-modal-btn.primary {
+      background: var(--ink);
+      color: var(--cream);
+      border-color: var(--ink);
+    }
+    .pdf-modal-btn.primary:hover { background: var(--accent); border-color: var(--accent); }
+    .pdf-modal-close {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      color: var(--ink-3);
+      cursor: pointer;
+      line-height: 1;
+      padding: 0.25rem;
+    }
+    .pdf-modal-close:hover { color: var(--ink); }
+</style>
 </head>
 <body>
 
@@ -1249,8 +1334,8 @@
   <ul class="nav-links" id="nav-links">
     <li><a href="#services" onclick="closeMenu()">Услуги</a></li>
     <li><a href="#cases" onclick="closeMenu()">Кейсы</a></li>
-    <li><a href="#pricing" onclick="closeMenu()">Цены</a></li>
     <li><a href="#about" onclick="closeMenu()">Обо мне</a></li>
+    <li><a href="#pricing" onclick="closeMenu()">Цены</a></li>
     <li><a href="#bonus" onclick="closeMenu()">Бонус</a></li>
     <li><a href="#contact" onclick="closeMenu()">Контакт</a></li>
   </ul>
@@ -1694,7 +1779,7 @@
       <p>9 разделов: Директ, РСЯ, Авито, Метрика, бюджет. Еженедельный чек-лист на 1 час работы.</p>
       <span class="bonus-dl">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Скачать PDF
+        Получить
       </span>
     </a>
 
@@ -1708,7 +1793,7 @@
       <p>20 пунктов в 4 блоках: цели, сайт, объявления, настройки. Распечатайте и отмечайте.</p>
       <span class="bonus-dl">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Скачать PDF
+        Получить
       </span>
     </a>
 
@@ -1722,7 +1807,7 @@
       <p>20+ терминов простым языком: CTR, CPL, ROAS, РСЯ, ретаргетинг и другие. Для тех, кто хочет понимать отчёты.</p>
       <span class="bonus-dl">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Скачать PDF
+        Получить
       </span>
     </a>
 
@@ -1736,7 +1821,7 @@
       <p>Разбор типичных ошибок в Директе и Авито — с описанием проблемы и конкретным способом исправления.</p>
       <span class="bonus-dl">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Скачать PDF
+        Получить
       </span>
     </a>
 
@@ -1750,7 +1835,7 @@
       <p>4 таблицы: еженедельный учёт, сравнение платформ, A/Б тест объявлений, журнал минус-слов.</p>
       <span class="bonus-dl">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Скачать PDF
+        Получить
       </span>
     </a>
 
@@ -1764,7 +1849,7 @@
       <p>Заполните перед встречей со специалистом — 7 разделов, 20 минут, и реклама будет настроена точнее с первого раза.</p>
       <span class="bonus-dl">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Скачать PDF
+        Получить
       </span>
     </a>
 
@@ -1795,6 +1880,19 @@
         <span class="contact-hint">Быстрый ответ →</span>
       </a>
 
+      <a href="https://max.ru/u/f9LHodD0cOKCgpCOnBjbrulMPveGxFRO2WqpWCaM6VCDF4PTb6yruNusgjs" class="contact-link" target="_blank" rel="noopener">
+        <div class="contact-icon" style="background: #e8f0ff;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#2952a3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+          </svg>
+        </div>
+        <div>
+          <div style="font-weight: 500;">MAX</div>
+          <div style="font-size:0.82rem; color: var(--ink-3);">Написать в MAX</div>
+        </div>
+        <span class="contact-hint">Даже на парковке →</span>
+      </a>
+
       <a href="tel:+79817399144" class="contact-link">
         <div class="contact-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -1805,7 +1903,7 @@
           <div style="font-weight: 500;">Телефон</div>
           <div style="font-size:0.82rem; color: var(--ink-3);">+7 981 739-91-44</div>
         </div>
-        <span class="contact-hint">Звонки →</span>
+        <span class="contact-hint">Звонок →</span>
       </a>
 
       <a href="mailto:morozovaee1808@yandex.ru" class="contact-link">
@@ -1818,20 +1916,7 @@
           <div style="font-weight: 500;">Email</div>
           <div style="font-size:0.82rem; color: var(--ink-3);">morozovaee1808@yandex.ru</div>
         </div>
-        <span class="contact-hint">Написать →</span>
-      </a>
-
-      <a href="https://max.ru/u/f9LHodD0cOKCgpCOnBjbrulMPveGxFRO2WqpWCaM6VCDF4PTb6yruNusgjs" class="contact-link" target="_blank" rel="noopener">
-        <div class="contact-icon" style="background: #e8f0ff;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#2952a3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
-          </svg>
-        </div>
-        <div>
-          <div style="font-weight: 500;">MAX</div>
-          <div style="font-size:0.82rem; color: var(--ink-3);">Написать в MAX</div>
-        </div>
-        <span class="contact-hint">Даже на парковке →</span>
+        <span class="contact-hint">Письмо →</span>
       </a>
     </div>
 
